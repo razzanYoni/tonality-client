@@ -1,0 +1,21 @@
+import React, { useState } from 'react';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from "./ui/dropdown-menu";
+
+export function AlbumDropdown() {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(prevState => !prevState);
+  };
+
+  return (
+    <typeof DropdownMenu>
+  );
+}
