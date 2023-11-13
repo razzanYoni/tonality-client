@@ -1,0 +1,31 @@
+body {
+    background-color: #09090B;
+}
+
+.album-page {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.album-card {
+  display: flex;
+  flex-direction: column;
+  margin: 30px;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+}
+
+.album-image {
+  width: 80%;
+  height: auto;
+  margin-top: 25px;
+  max-height: 240px;
+}
+
+.text-container {
+  padding: 10px;
+}
