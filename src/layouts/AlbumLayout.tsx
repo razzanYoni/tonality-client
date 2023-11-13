@@ -1,6 +1,6 @@
 // import React, { ReactNode } from 'react';
 import Sidebar from '../components/sidebar';
-import AlbumPage from '../pages/AlbumsPage';
+import AlbumPage from '../pages/AlbumPage';
 
 // interface AlbumLayoutProps {
 //   children: ReactNode;
