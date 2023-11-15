@@ -2,6 +2,8 @@ import React from 'react';
 // import { useParams } from 'react-router-dom';
 import cover from '../assets/images/default-cover.jpg'
 import { TableSongs } from '@/components/songs-table';
+import { AlbumDropdown } from '@/components/album-dropdown';
+import { useNavigate } from 'react-router-dom';
 
 const SongsPage: React.FC = () => {
 //   const { albumId } = useParams<{ albumId: string }>();
@@ -38,6 +40,11 @@ const SongsPage: React.FC = () => {
 
   const countSong = songs.length;
 
+  const navigate = useNavigate();
+
+  const toAddSong = () => {
+    navigate('/1/add-song');
+  }
   return (
     <div className='mt-2 w-800 flex flex-col items-center '>
         <div className='flex items-end w-[760px]'>
@@ -49,12 +56,12 @@ const SongsPage: React.FC = () => {
                 <div>{countSong} songs</div>
                 <div>{totalDuration}</div>
             </div>
-            <div>
-                // dsini
+            <div className='absolute right-64 top-7'>
+                <AlbumDropdown/>
             </div>
         </div>
         <div className='mt-[10px] mb-[80px] justify-start w-[900px]'>
-            <button className="bg-white hover:bg-gray-300 mt-[30px] mb-[30px] px-4 py-2 rounded absolute right-64">
+            <button onClick={toAddSong} className="bg-white hover:bg-gray-300 mt-[30px] mb-[30px] px-4 py-2 rounded absolute right-64">
             Add Song
             </button>
         </div>
