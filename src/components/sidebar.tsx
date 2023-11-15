@@ -1,10 +1,16 @@
 import logo from '../assets/images/logo.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle, faUser, faUserCog, faUserCheck } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 // import profile from '../assets/images/user.png';
 
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
+  const toPremAlbum = () => {
+    navigate('/albums');
+  }
   return (
     <div className="sidebar text-white w-200 flex fixed flex-col items-center top-0 left-0 h-full border-r border-opacity-10 border-gray-300 pr-6">
       <div className="sidebar-header flex items-center">
@@ -13,7 +19,7 @@ const Sidebar = () => {
       </div>
       <div className="menu h-screen">
         <ul className='text-left'>
-        <li className="mb-2 hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center">
+        <li className="mb-2 hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center" onClick={toPremAlbum}>
             <FontAwesomeIcon icon={faPlayCircle} className="mr-2" /> Premium Albums
           </li>
           <li className="mb-2 hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center">
