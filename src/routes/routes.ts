@@ -9,6 +9,8 @@ import AddSongPage from "@/pages/AddSongPage.tsx";
 import EditSongPage from "@/pages/EditSongPage.tsx";
 import {NotMatchLayout} from "@/layouts/NotMatchLayout.tsx";
 import NotMatch from "@/pages/NotMatch.tsx";
+import DeleteAlbumDialog from "@/components/delete-dialog-album";
+import DeleteSongDialog from "@/components/delete-dialog-song";
 
 export const routes = [
   {
@@ -48,6 +50,12 @@ export const routes = [
             title: 'Edit Album page',
             component: EditAlbumPage,
             path: "/:albumId/edit-album",
+          },
+          {
+            name: 'delete-album',
+            title: 'Delete Album page',
+            component: DeleteAlbumDialog,
+            path: "/:albumId/delete-album/",
           }
         ]
       },
@@ -73,6 +81,12 @@ export const routes = [
             title: 'Edit Song page',
             component: EditSongPage,
             path: "/:albumId/edit-song/:songId",
+          },
+          {
+            name: 'delete-song',
+            title: 'Delete Song page',
+            component: DeleteSongDialog,
+            path: "/:albumId/delete-song/:songId",
           }
         ]
       }
