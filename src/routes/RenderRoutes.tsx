@@ -8,12 +8,6 @@ export const RenderRoutes: React.FC = (mainRoutes) => {
     const layouts = mainRoutes.map(({ layout: Layout, routes }, index) => {
       const subRoutes = generateFlattenRoutes(routes);
 
-      subRoutes.map(({ component: Component, path, name }) => {
-        console.log("component", Component);
-        console.log("path", path);
-        console.log("name", name);
-      });
-
       return (
         <Route key={index} element={<Layout />}>
           {subRoutes.map(
@@ -42,7 +36,6 @@ export const RenderRoutes: React.FC = (mainRoutes) => {
         </Route>
       );
     });
-    console.log("layouts", layouts);
     return (
       <Routes>
         <>{layouts}</>
