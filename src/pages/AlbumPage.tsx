@@ -1,9 +1,15 @@
 import React from 'react';
 import AlbumCard from '@/components/album-card';
 import "../styles/Albums.css";
+import { useNavigate } from 'react-router-dom';
 
 
 const AlbumPage: React.FC = () => {
+  const navigate = useNavigate();
+
+  const toAddAlbum = () => {
+    navigate('/add-album', );
+  }
     const albums = [
       { id: 1, title: 'Album 1', description: 'Deskripsi Album 1', imageUrl: 'src/assets/images/default-cover.jpg' },
       { id: 2, title: 'Album 2', description: 'Deskripsi Album 2', imageUrl: 'src/assets/images/default-cover.jpg' },
@@ -19,7 +25,7 @@ const AlbumPage: React.FC = () => {
 
     return (
       <div className="album-page pt-12">
-        <button className="bg-white hover:bg-gray-300 px-4 py-2 rounded absolute top-10 right-10">
+        <button className="bg-white hover:bg-gray-300 px-4 py-2 rounded absolute top-10 right-10" onClick={toAddAlbum}>
         Add Album
         </button>
         {albums.map((album) => (

@@ -1,6 +1,7 @@
 import React from "react";
 import { Card } from "./ui/card";
 import "../styles/Albums.css";
+import { useNavigate } from "react-router-dom";
 
 interface AlbumCard {
     title: string;
@@ -9,8 +10,13 @@ interface AlbumCard {
 }
 
 const AlbumCard: React.FC<AlbumCard> = ({ title, description, imageUrl }) => {
+  const navigate = useNavigate();
+
+  const toDetail = () => {
+    navigate('/1/songs');
+  }
     return (
-      <Card style={{ width: "240px", height: "300px", backgroundColor: "#D9D9D9" }} className="album-card cursor-pointer">
+      <Card onClick={toDetail} style={{ width: "240px", height: "300px", backgroundColor: "#D9D9D9" }} className="album-card cursor-pointer border-none transition duration-300 ease-in-out transform hover:scale-105">
         <div className="image-container">
          <img src={imageUrl} alt={title} className="album-image" />
         </div>
