@@ -1,7 +1,7 @@
-import {Outlet} from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
-export const NotMatchLayout = () => {
-  return (
-    <Outlet/>
-  );
+const NotMatchLayout = () => {
+  return <Outlet />;
 };
+
+export default NotMatchLayout;
