@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 export function AlbumDropdown() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  console.log('dropdownOpen', dropdownOpen);
   const toggleDropdown = () => {
     setDropdownOpen(prevState => !prevState);
   };

@@ -9,7 +9,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   const toPremAlbum = () => {
-    navigate('/albums');
+    navigate('/album');
   }
   return (
     <div className="sidebar text-white w-200 flex fixed flex-col items-center top-0 left-0 h-full border-r border-opacity-10 border-gray-300 pr-6">
