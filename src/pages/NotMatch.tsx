@@ -1,8 +1,18 @@
 const NotMatch = () => {
   return (
-    <div>
-      <h1 className="text-4xl text-white">404 Not Found</h1>
-    </div>
+    <>
+      <div className="h-screen flex flex-col items-center justify-center">
+        <h1 className="font-bold text-3xl text-neutral-100">
+          Oops!
+        </h1>
+        <p className="my-5 text-neutral-100">
+          Sorry, an unexpected error has occurred.
+        </p>
+        <p className="text-neutral-100">
+          Not Found
+        </p>
+      </div>
+    </>
   );
 };
 
