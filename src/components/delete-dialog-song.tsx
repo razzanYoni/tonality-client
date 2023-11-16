@@ -1,6 +1,21 @@
-import React from 'react';
+import axios from 'axios';
+import { useNavigate, useParams } from 'react-router';
 
-const DeleteSongDialog: React.FC = () => {
+const DeleteSongDialog = () => {
+  const { albumId, songId } = useParams();
+  const navigate = useNavigate();
+  const handleDeleteSong = () => {
+    try {
+      axios.delete(`http://localhost:3000/api/premium-album/${albumId}/${songId}`);
+    } catch (error) {
+      console.error('Error deleting song:', error);
+    }
+  };
+
+  const handleCancel = () => {
+    navigate(-1);
+  };
+
   return (
     <>
       {(
@@ -14,14 +29,16 @@ const DeleteSongDialog: React.FC = () => {
               <div className="mb-4">Are you sure you want to delete this Song?</div>
               <div className="flex justify-end">
                 <button
+                  onClick={handleCancel}
                   className="px-4 py-2 mr-2 bg-gray-300 hover:bg-gray-400 rounded"
                 >
-                  Batal
+                  Cancel
                 </button>
                 <button
+                  onClick={handleDeleteSong}
                   className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
                 >
-                  Hapus
+                  Delete
                 </button>
               </div>
             </div>
