@@ -1,6 +1,6 @@
 FROM node:18.18.2 AS build
 
-WORKDIR /app
+WORKDIR /tonality/tonality-client
 
 COPY package*.json .
 
@@ -12,7 +12,7 @@ RUN npm run build
 
 FROM nginx:1.24.0-alpine
 
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /tonality/tonality-client/dist /usr/share/nginx/html
 
 EXPOSE 80
 
