@@ -1,11 +1,18 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
 import { SongDropdown } from "./songs-dropdown";
 
-interface TableSongsProps {
-    data: Array<{ id: number; title: string; duration: number }>;
+interface PremiumSong {
+  songId: number;
+  albumId: number;
+  title: String;
+  artist: String;
+  songNumber: number;
+  discNumber:number;
+  duration:number;
+  audioFilename: String;
   }
 
-export function TableSongs( { data }: TableSongsProps ) {
+export function TableSongs( data: PremiumSong[] ) {
     const formatDuration = (seconds: number): string => {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
@@ -28,7 +35,7 @@ export function TableSongs( { data }: TableSongsProps ) {
             </TableHeader>
             <TableBody className="text-left">
                 {data.map((song, index) => (
-                    <TableRow key={song.id} className="hover:bg-transparent">
+                    <TableRow key={song.songId} className="hover:bg-transparent">
                         <TableCell>{index + 1}</TableCell>
                         <TableCell>{song.title}</TableCell>
                         <TableCell>{formatDuration(song.duration)}</TableCell>

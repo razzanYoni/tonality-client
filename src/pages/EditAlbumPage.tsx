@@ -1,7 +1,52 @@
-const EditAlbum = () => {
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+
+export default function EditAlbum() {
+  const { albumId } = useParams();
+  const [albumData, setAlbumData] = useState({
+    albumName: '',
+    releaseDate: '',
+    genre: '',
+    artist: '',
+    coverFile: null
+  });
+
+  useEffect(() => {
+    const fetchAlbumData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/premium-album/${albumId}`
+        );
+        setAlbumData(response.data);
+      } catch (error) {
+        console.error('Error fetching album data:', error);
+      }
+    };
+
+    fetchAlbumData();
+  }, [albumId]);
+
+  const handleEditAlbum = async () => {
+    try {
+      await axios.patch(
+        `http://localhost:3000/api/premium-album/${albumId}`,
+        albumData
+      );
+
+      console.log('Album edited successfully!');
+    } catch (error) {
+      console.error('Error editing album:', error);
+    }
+  };
+
+  const handleChange = (e: { target: { id: any; value: any; }; }) => {
+    setAlbumData({ ...albumData, [e.target.id]: e.target.value });
+  };
+
   return (
     <div className="w-full max-w-xs ml-[450px] mt-[50px]">
-      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <form id="edit-form" className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <div className="mb-2 text-2xl font-bold">
             Edit Album
         </div>
@@ -13,7 +58,9 @@ const EditAlbum = () => {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="albumName"
             type="text"
-            placeholder="Album Name"
+            placeholder="Artist"
+            onChange={handleChange}
+            value={albumData.albumName}
           />
         </div>
 
@@ -25,6 +72,8 @@ const EditAlbum = () => {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="releaseDate"
             type="date"
+            onChange={handleChange}
+            value={albumData.releaseDate}
           />
         </div>
 
@@ -37,6 +86,8 @@ const EditAlbum = () => {
             id="genre"
             type="text"
             placeholder="Genre"
+            value={albumData.genre}
+            onChange={handleChange}
           />
         </div>
 
@@ -49,6 +100,8 @@ const EditAlbum = () => {
             id="artist"
             type="text"
             placeholder="Artist"
+            onChange={handleChange}
+            value={albumData.artist}
           />
         </div>
 
@@ -63,16 +116,12 @@ const EditAlbum = () => {
             accept="image/*"
           />
         </div>
-
         <div className="flex items-center justify-center">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+          <button onClick={handleEditAlbum} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
             Edit
           </button>
         </div>
       </form>
-
     </div>
   );
 }
-
-export default EditAlbum;

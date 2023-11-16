@@ -4,12 +4,15 @@ import "../styles/Albums.css";
 import { useNavigate } from "react-router-dom";
 
 interface AlbumCard {
-    title: string;
-    description: string;
-    imageUrl: string;
+  albumId: number;
+  albumName: string;
+  releaseDate: Date;
+  genre: string;
+  artist: string;
+  coverFilename: string;
 }
 
-const AlbumCard: React.FC<AlbumCard> = ({ title, description, imageUrl }) => {
+const AlbumCard: React.FC<AlbumCard> = ({ albumName, artist, coverFilename }) => {
   const navigate = useNavigate();
 
   const toDetail = () => {
@@ -18,11 +21,11 @@ const AlbumCard: React.FC<AlbumCard> = ({ title, description, imageUrl }) => {
     return (
       <Card onClick={toDetail} style={{ width: "240px", height: "300px", backgroundColor: "#D9D9D9" }} className="album-card cursor-pointer border-none transition duration-300 ease-in-out transform hover:scale-105">
         <div className="image-container">
-         <img src={imageUrl} alt={title} className="album-image" />
+         <img src={coverFilename} alt={albumName} className="album-image" />
         </div>
         <div className="text-container text-left pl-6">
-          <h3>{title}</h3>
-          <p>{description}</p>
+          <h3>{albumName}</h3>
+          <p>{artist}</p>
         </div>
       </Card>
     );
