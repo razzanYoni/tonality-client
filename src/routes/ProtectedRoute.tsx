@@ -6,8 +6,4 @@ const ProtectedRoute = ({ isPublic }) => {
   return isValidUser || isPublic ? <Outlet /> : <Navigate to="/login" />;
 };
 
-const ProtectedRoute = ({ isPublic, isAuthorized }) => {
-  return isPublic || isAuthorized ? <Outlet /> : <Navigate to="/login" />;
-};
-
 export default ProtectedRoute;
