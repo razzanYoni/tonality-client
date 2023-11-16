@@ -15,6 +15,7 @@ interface PremiumAlbum {
 
 const AlbumPage: React.FC = () => {
   const [dataAlbums, setDataAlbums] = useState<PremiumAlbum[]>([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,8 +25,10 @@ const AlbumPage: React.FC = () => {
         console.log(response);
 
         setDataAlbums(response.data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setLoading(true)
       }
     };
 
@@ -41,9 +44,12 @@ const AlbumPage: React.FC = () => {
         <button className="bg-white hover:bg-gray-300 px-4 py-2 rounded absolute top-10 right-10" onClick={toAddAlbum}>
         Add Album
         </button>
-        {dataAlbums.map((album) => (
+        {
+          loading ? <div className="text-white">Loading . . .</div> :
+          dataAlbums.map((album) => (
           <AlbumCard key={album.albumId} {...album} />
-        ))}
+          ))
+        }
       </div>
     );
   };

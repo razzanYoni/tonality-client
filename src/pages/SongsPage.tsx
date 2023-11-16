@@ -8,17 +8,18 @@ import axios from 'axios';
 interface PremiumSong {
   songId: number;
   albumId: number;
-  title: String;
-  artist: String;
+  title: string;
+  artist: string;
   songNumber: number;
   discNumber:number;
   duration:number;
-  audioFilename: String;
+  audioFilename: string;
 }
 
 const SongsPage: React.FC = () => {
   const { albumId } = useParams<{ albumId: string }>();
   const [songsData, setSongsData] = useState<PremiumSong[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,8 +28,10 @@ const SongsPage: React.FC = () => {
         console.log(response);
 
         setSongsData(response.data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setLoading(true)
       }
     };
 
@@ -80,7 +83,9 @@ const SongsPage: React.FC = () => {
             </button>
         </div>
         <div>
-            <TableSongs {...songsData} />
+          {
+            loading ? <div className="text-white">Loading . . .</div> : <TableSongs {...songsData} />
+          }
         </div>
     </div>
   );
