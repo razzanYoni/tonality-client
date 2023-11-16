@@ -10,7 +10,9 @@ import { useNavigate } from 'react-router-dom';
 
 export function SongDropdown() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  console.log('dropdownOpen', dropdownOpen);
+
+  console.log(dropdownOpen);
+
   const toggleDropdown = () => {
     setDropdownOpen(prevState => !prevState);
   };

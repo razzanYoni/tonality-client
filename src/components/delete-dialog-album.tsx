@@ -1,37 +1,51 @@
-import React from 'react';
+import { useState } from 'react';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "./ui/dropdown-menu";
+import { Button } from "./ui/button";
+import { useNavigate } from 'react-router-dom';
 
-const DeleteAlbumDialog: React.FC = () => {
+export function AlbumDropdown() {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  console.log(dropdownOpen);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(prevState => !prevState);
+  };
+
+  const navigate = useNavigate();
+
+  const handleEditAlbum = () => {
+    console.log('Edit Album');
+    setDropdownOpen(false);
+    navigate('/1/edit-album');
+  }
+
+  const handleDeleteAlbum = () => {
+    console.log('Delete Album');
+    setDropdownOpen(false);
+    navigate('/1/delete-album');
+  };
 
   return (
-    <>
-      {(
-        <div className="fixed inset-0 overflow-y-auto z-50">
-          <div className="flex items-center justify-center min-h-screen">
-            <div className="fixed inset-0 transition-opacity">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <div className="bg-white rounded p-8 z-10">
-              <div className="mb-4 text-lg font-semibold">Delete Album Confirmation</div>
-              <div className="mb-4">Are you sure you want to delete this album?</div>
-              <div className="flex justify-end">
-                <button
-                  className="px-4 py-2 mr-2 bg-gray-300 hover:bg-gray-400 rounded"
-                >
-                  Batal
-                </button>
-                <button
-                  className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
-                >
-                  Hapus
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" onClick={toggleDropdown} className='bg-zinc-800 border-none text-white rounded h-3 pb-5'>
+          ...
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-40 text-white bg-black border-grey-200" style={{ position: 'absolute', right: -20 }}>
+        <DropdownMenuItem onClick={handleEditAlbum} className='hover:bg-zinc-800'>
+          Edit Album
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleDeleteAlbum}>
+          Delete Album
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
-};
-
-export default DeleteAlbumDialog;
+}

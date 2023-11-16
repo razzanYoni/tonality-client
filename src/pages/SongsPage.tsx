@@ -1,25 +1,39 @@
-import React from 'react';
-// import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import cover from '../assets/images/default-cover.jpg'
 import { TableSongs } from '@/components/songs-table';
 import { AlbumDropdown } from '@/components/album-dropdown';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
+
+interface PremiumSong {
+  songId: number;
+  albumId: number;
+  title: String;
+  artist: String;
+  songNumber: number;
+  discNumber:number;
+  duration:number;
+  audioFilename: String;
+}
 
 const SongsPage: React.FC = () => {
-//   const { albumId } = useParams<{ albumId: string }>();
+  const { albumId } = useParams<{ albumId: string }>();
+  const [songsData, setSongsData] = useState<PremiumSong[]>([]);
 
-  const songs = [
-    { id: 1, title: 'Song 1', duration: 150 },
-    { id: 2, title: 'Song 2', duration: 255 },
-    { id: 3, title: 'Song 3', duration: 165 },
-    { id: 4, title: 'Song 4', duration: 300 },
-    { id: 5, title: 'Song 5', duration: 190 },
-    { id: 6, title: 'Song 6', duration: 280 },
-    { id: 7, title: 'Song 7', duration: 200 },
-    { id: 8, title: 'Song 8', duration: 240 },
-    { id: 9, title: 'Song 9', duration: 232 },
-    { id: 10, title: 'Song 10', duration: 150 },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/premium-album/${albumId}`);
+        console.log(response);
+
+        setSongsData(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const calculateTotalDuration = (songsArray: Array<{ duration: number }>): string => {
     const totalSeconds = songsArray.reduce((total, song) => total + song.duration, 0);
@@ -36,9 +50,9 @@ const SongsPage: React.FC = () => {
     }
   };
 
-  const totalDuration = calculateTotalDuration(songs);
+  const totalDuration = calculateTotalDuration(songsData);
 
-  const countSong = songs.length;
+  const countSong = songsData.length;
 
   const navigate = useNavigate();
 
@@ -66,7 +80,7 @@ const SongsPage: React.FC = () => {
             </button>
         </div>
         <div>
-            <TableSongs data={songs} />
+            <TableSongs {...songsData} />
         </div>
     </div>
   );
