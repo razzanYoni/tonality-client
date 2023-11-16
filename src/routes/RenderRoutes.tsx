@@ -7,24 +7,35 @@ export const RenderRoutes  : React.FC = (mainRoutes) => {
     const layouts = mainRoutes.map(({layout: Layout, routes}, index) => {
       const subRoutes = generateFlattenRoutes(routes);
 
+      subRoutes.map(({component: Component, path, name}) => {
+        console.log('component', Component)
+        console.log('path', path)
+        console.log('name', name)
+      })
+
       return (
         <Route key={index} element={<Layout/>}>
-          <Route element={<ProtectedRoute isAuthorized={isAuthorized}/>}>
-            {subRoutes.map(({component: Component, path, name}) => {
-              return (
-                Component
+          {subRoutes.map(({component: Component, path, name, isPublic}, index) => {
+            const isPublics : boolean = typeof isPublic === 'boolean' ? isPublic : false;
+            const componentFound = Component !== undefined;
+            if (!componentFound) return null;
+
+            return (
+              (<Route key={index} element={<ProtectedRoute isPublic={isPublics} isAuthorized={isAuthorized}/>}>)
+                && Component
                 && path
                 && (<Route key={name} element={<Component/>} path={path}/>)
-              )
-            })}
-          </Route>
+                && (</Route>)
+            )
+          })}
         </Route>
       )
     });
+    console.log('layouts', layouts)
     return (
       <Routes>
         <>
-        {layouts}
+          {layouts}
         </>
       </Routes>
     );
