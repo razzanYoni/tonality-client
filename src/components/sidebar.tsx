@@ -1,6 +1,6 @@
 import logo from '../assets/images/logo.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlayCircle, faUser, faUserCog, faUserCheck } from '@fortawesome/free-solid-svg-icons';
+import { faPlayCircle, faUser, } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 // import profile from '../assets/images/user.png';
 
@@ -23,10 +23,7 @@ const Sidebar = () => {
             <FontAwesomeIcon icon={faPlayCircle} className="mr-2" /> Premium Albums
           </li>
           <li className="mb-2 hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center">
-            <FontAwesomeIcon icon={faUserCog} className="mr-2" /> Subscription Requests
-          </li>
-          <li className="mb-2 hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center">
-            <FontAwesomeIcon icon={faUserCheck} className="mr-2" /> Active Subscriptions
+            <FontAwesomeIcon icon={faUser} className="mr-2" /> Subscription
           </li>
         </ul>
       </div>
