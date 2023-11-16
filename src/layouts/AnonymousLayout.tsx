@@ -8,10 +8,10 @@ const AnonymousLayout = () => {
       <Toaster />
       <div className="flex">
         <div className="flex flex-col justify-between bg-neutral-900 h-screen w-1/2">
-          <div className="m-5">
+          <div className="m-10">
             <img src={logo} alt="Tonality Logo"></img>
           </div>
-          <div className="m-5">
+          <div className="m-10">
             <p className="text-neutral-100">
               "Music is the universal language that transcends borders,
               cultures, and time, speaking to the very core of our humanity,
