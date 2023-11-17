@@ -1,5 +1,13 @@
 import {useState} from "react";
 import axios from "axios";
+import { date, object, string, z } from "zod";
+
+const albumSchema = object({
+  albumName: string().min(1, "Album Name cannot be empty"),
+  releaseDate: date(),
+  genre: string().min(1, "Genre cannot be empty"),
+  artist: string().min(1, "Artist cannot be empty"),
+});
 
 export default function AddAlbum() {
   const [albumName, setAlbumName] = useState("");
@@ -20,6 +28,9 @@ export default function AddAlbum() {
       if (coverFile !== null) {
         formData.append("coverFile", coverFile);
       }
+
+      // Validate
+      albumSchema.parse({ albumName, releaseDate, genre, artist });
 
       await axios.post("http://localhost:3000/api/premium-album", formData, {
         headers: {
