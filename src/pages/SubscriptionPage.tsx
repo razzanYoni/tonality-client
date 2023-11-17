@@ -1,17 +1,7 @@
 import {useEffect, useState} from 'react';
 import {SubscriptionTable} from "@/components/subscription-table.tsx";
 import api from "@/api/api.ts";
-
-interface Subscription {
-  userId: number;
-  premiumAlbumId: number;
-  username: string;
-  albumName: string;
-  artist: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import {Subscription} from "@/types/subscription.ts";
 
 const SubscriptionPage = () => {
   const [subscriptionData, setSubscriptionData] = useState<Subscription[]>([]);
@@ -23,17 +13,20 @@ const SubscriptionPage = () => {
     try {
       const response = await api.get('subscription' + '?page=' + page,)
       setLoading(false);
-      setSubscriptionData(response.data.subscription);
+      setSubscriptionData(
+        () => ([
+          ...response.data.subscription,
+        ])
+      );
     } catch (error) {
       console.error('Error fetching data:', error);
       setLoading(true)
-      setSubscriptionData([])
+      setSubscriptionData(() => ([]));
     }
   }
 
   useEffect(() => {
-    update();
-    const interval = setInterval(update, 1000 * 5); // 100 milliseconds
+    const interval = setInterval(update, 1000); // 100 milliseconds
     return () => clearInterval(interval);
   }, [subscriptionData]);
 

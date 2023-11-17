@@ -1,17 +1,7 @@
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
 import {SubscriptionDropdown} from "@/components/subcription-dropdown.tsx";
 import api from "@/api/api.ts";
-
-interface Subscription {
-  userId: number;
-  premiumAlbumId: number;
-  username: string;
-  albumName: string;
-  artist: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import {Subscription} from "@/types/subscription.ts";
 
 export function SubscriptionTable({data}: { data: Subscription[] }) {
   return (
