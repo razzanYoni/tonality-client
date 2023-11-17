@@ -8,20 +8,25 @@ const AuthProvider = () => {
   const [accessToken, setAccessToken] =
     React.useState<string | null>(sessionStorage.getItem("accessToken") ?? null);
 
-  const handleLogin = (accessToken: string) => {
+  const [username, setUsername] = React.useState<string | null>(null);
+
+  const handleLogin = (accessToken: string, username: string) => {
     sessionStorage.setItem("accessToken", accessToken);
     setAccessToken(accessToken);
+    setUsername(username);
     navigate("/album");
   };
 
   const handleLogout = () => {
     sessionStorage.removeItem("accessToken");
     setAccessToken(null);
+    setUsername(null);
     navigate("/login", );
   };
 
   const value = {
     token: accessToken,
+    username: username,
     onLogin: handleLogin,
     onLogout: handleLogout,
   };
