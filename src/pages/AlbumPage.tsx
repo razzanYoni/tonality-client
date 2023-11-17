@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import AlbumCard from '@/components/album-card';
 import "../styles/Albums.css";
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { Button } from '@/components/ui/button';
+import api from "@/api/api.ts";
 
 interface PremiumAlbum {
   albumId: number;
@@ -14,7 +14,7 @@ interface PremiumAlbum {
   coverFilename: string;
 }
 
-const AlbumPage: React.FC = () => {
+const AlbumPage = () => {
   const [dataAlbums, setDataAlbums] = useState<PremiumAlbum[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,7 +23,8 @@ const AlbumPage: React.FC = () => {
 
   const fetchData = async (page: number) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/premium-album?page=${page}`);
+      const response = await api.get(
+        `/premium-album?page=${page}`);
       console.log(response);
 
       setDataAlbums(response.data.data);

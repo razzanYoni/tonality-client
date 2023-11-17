@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import axios from "axios";
+import {useEffect, useState} from 'react';
 import {SubscriptionTable} from "@/components/subscription-table.tsx";
 import api from "@/api/api.ts";
 
@@ -15,7 +14,7 @@ interface Subscription {
 }
 
 const SubscriptionPage = () => {
-  const [subscriptionData, setSubscriptionData] : [Subscription[], (subscriptionData: Subscription[]) => void] = useState([]);
+  const [subscriptionData, setSubscriptionData] = useState<Subscription[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     // get current page from query params

@@ -2,20 +2,20 @@ import "./App.css";
 import React from "react";
 import { RenderRoutes } from "@/routes/RenderRoutes.tsx";
 import { routes } from "@/routes/routes.ts";
-import AuthProvider from "@/context/AuthProvider.tsx";
 
-export const AuthContext = React.createContext(null);
+export type UserContext =  {token: string | null, onLogin: (accessToken: string) => void, onLogout: () => void}
+export const AuthContext = React.createContext<
+  UserContext>(null as unknown as UserContext);
 
 export const useAuth = () => React.useContext(AuthContext);
 
+// @ts-expect-error error bg
 export const Routes: React.ReactNode = RenderRoutes(routes);
 
 const TonalityApp = () => {
   return (
-    <AuthProvider>
-      {/*@ts-ignore*/}
+  // @ts-expect-error error bg
       <Routes />
-    </AuthProvider>
   );
 };
 

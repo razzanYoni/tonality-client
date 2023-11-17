@@ -1,27 +1,23 @@
 import React from "react";
 import { AuthContext } from "@/TonalityApp.tsx";
-import { useNavigate } from "react-router-dom";
+import {Outlet, useNavigate} from "react-router-dom";
 
-const AuthProvider = ({ children }) => {
+const AuthProvider = () => {
   const navigate = useNavigate();
 
-  const [accessToken, setAccessToken] = React.useState(null);
+  const [accessToken, setAccessToken] =
+    React.useState<string | null>(sessionStorage.getItem("accessToken") ?? null);
 
-  if (sessionStorage.getItem("accessToken")) {
-    setAccessToken(sessionStorage.getItem("accessToken"));
-    navigate("/album");
-  }
-
-  const handleLogin = (accessToken) => {
+  const handleLogin = (accessToken: string) => {
     sessionStorage.setItem("accessToken", accessToken);
     setAccessToken(accessToken);
-    navigate("/album");
+    navigate("/album", { replace: true });
   };
 
   const handleLogout = () => {
     sessionStorage.removeItem("accessToken");
     setAccessToken(null);
-    navigate("/login");
+    navigate("/login", { replace: true });
   };
 
   const value = {
@@ -30,7 +26,9 @@ const AuthProvider = ({ children }) => {
     onLogout: handleLogout,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value}>
+    <Outlet />
+  </AuthContext.Provider>;
 };
 
 export default AuthProvider;

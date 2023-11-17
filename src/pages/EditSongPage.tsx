@@ -1,7 +1,7 @@
-import axios from "axios";
-import { useState } from "react";
+import {ChangeEventHandler, useState} from "react";
 import { useParams } from "react-router-dom";
-import { number, object, string, z } from "zod";
+import { number, object, string } from "zod";
+import api from "@/api/api.ts";
 
 const songSchema = object({
   title: string().min(1, "Title cannot be empty"),
@@ -26,8 +26,8 @@ const EditSong = () => {
   const handleEditSong = async () => {
     try {
       songSchema.parse(songsData);
-      await axios.patch(
-        `/api/premium-album/${albumId}/${songId}`,
+      await api.patch(
+        `/premium-album/${albumId}/${songId}`,
         songsData
       );
 
@@ -37,7 +37,7 @@ const EditSong = () => {
     }
   };
 
-  const handleChange = (e: { target: { id: any; value: any; }; }) => {
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setSongsData({ ...songsData, [e.target.id]: e.target.value });
   };
 

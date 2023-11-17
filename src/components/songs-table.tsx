@@ -12,7 +12,7 @@ interface PremiumSong {
   audioFilename: string;
   }
 
-export function TableSongs( data: PremiumSong[] ) {
+export function TableSongs({data}: { data: PremiumSong[] } ) {
     const formatDuration = (seconds: number): string => {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;

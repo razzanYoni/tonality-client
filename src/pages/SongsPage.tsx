@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import cover from '../assets/images/default-cover.jpg'
 import { TableSongs } from '@/components/songs-table';
 import { AlbumDropdown } from '@/components/album-dropdown';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from "@/api/api.ts";
 
 interface PremiumSong {
   songId: number;
@@ -16,7 +16,7 @@ interface PremiumSong {
   audioFilename: string;
 }
 
-const SongsPage: React.FC = () => {
+const SongsPage = () => {
   const { albumId } = useParams<{ albumId: string }>();
   const [songsData, setSongsData] = useState<PremiumSong[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +24,8 @@ const SongsPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/premium-album/${albumId}`);
+        const response = await api.get(
+          `/premium-album/${albumId}`);
         console.log(response);
 
         setSongsData(response.data);
@@ -84,7 +85,7 @@ const SongsPage: React.FC = () => {
         </div>
         <div>
           {
-            loading ? <div className="text-white">Loading . . .</div> : <TableSongs {...songsData} />
+            loading ? <div className="text-white">Loading . . .</div> : <TableSongs data={songsData} />
           }
         </div>
     </div>

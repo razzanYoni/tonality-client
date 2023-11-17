@@ -13,8 +13,22 @@ import NotMatch from "@/pages/NotMatch.tsx";
 import DeleteAlbumDialog from "@/components/delete-dialog-album";
 import DeleteSongDialog from "@/components/delete-dialog-song";
 import SubscriptionPage from "@/pages/SubscriptionPage.tsx";
+import {ReactNode} from "react";
 
-export const routes = [
+export type Route = {
+  name: string;
+  title: string;
+  component?: () => ReactNode,
+  path?: string;
+  isPublic?: boolean;
+  hasSiderLink?: boolean;
+  routes?: Array<Route>;
+}
+export type RouteWithLayout = {
+  layout: () => ReactNode,
+  routes: Array<Route>
+}
+export const routes: RouteWithLayout[] = [
   {
     layout: AnonymousLayout,
     routes: [

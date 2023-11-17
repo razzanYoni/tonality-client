@@ -1,16 +1,18 @@
-import React from "react";
 import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "@/routes/ProtectedRoute.tsx";
 import { generateFlattenRoutes } from "@/lib/utils.ts";
+import {RouteWithLayout} from "@/routes/routes.ts";
+import AuthProvider from "@/context/AuthProvider.tsx";
 
-export const RenderRoutes: React.FC = (mainRoutes) => {
-  return ({ isAuthorized }) => {
+export const RenderRoutes = (mainRoutes: RouteWithLayout[]) => {
+  return () => {
     const layouts = mainRoutes.map(({ layout: Layout, routes }, index) => {
       const subRoutes = generateFlattenRoutes(routes);
 
       return (
         <Route key={index} element={<Layout />}>
           {subRoutes.map(
+            // @ts-expect-error error bg
             ({ component: Component, path, name, isPublic }, index) => {
               const isPublics: boolean =
                 typeof isPublic === "boolean" ? isPublic : false;
@@ -23,7 +25,6 @@ export const RenderRoutes: React.FC = (mainRoutes) => {
                   element={
                     <ProtectedRoute
                       isPublic={isPublics}
-                      isAuthorized={isAuthorized}
                     />
                   }
                 >
@@ -38,7 +39,9 @@ export const RenderRoutes: React.FC = (mainRoutes) => {
     });
     return (
       <Routes>
-        <>{layouts}</>
+        <Route element={<AuthProvider />}>
+        {layouts}
+        </Route>
       </Routes>
     );
   };

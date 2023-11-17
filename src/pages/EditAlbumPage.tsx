@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import {ChangeEventHandler, useEffect, useState} from 'react';
 import { useParams } from 'react-router-dom';
-import { date, object, string, z } from 'zod';
+import { date, object, string } from 'zod';
+import api from "@/api/api.ts";
 
 const albumSchema = object({
   albumName: string().min(1, "Album Name cannot be empty"),
@@ -24,8 +24,8 @@ export default function EditAlbum() {
   useEffect(() => {
     const fetchAlbumData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/api/premium-album/${albumId}`
+        const response = await api.get(
+          `/premium-album/${albumId}`
         );
         setAlbumData(response.data);
       } catch (error) {
@@ -39,8 +39,8 @@ export default function EditAlbum() {
   const handleEditAlbum = async () => {
     try {
       albumSchema.parse(albumData);
-      await axios.patch(
-        `http://localhost:3000/api/premium-album/${albumId}`,
+      await api.patch(
+        `/premium-album/${albumId}`,
         albumData
       );
 
@@ -50,7 +50,7 @@ export default function EditAlbum() {
     }
   };
 
-  const handleChange = (e: { target: { id: any; value: any; }; }) => {
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setAlbumData({ ...albumData, [e.target.id]: e.target.value });
   };
 

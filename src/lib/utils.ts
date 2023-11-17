@@ -12,7 +12,7 @@ interface Route {
   title: string;
   hasSiderLink?: boolean;
   routes?: Route[];
-  component?: React.ComponentType<any>;
+  component?: React.ComponentType<unknown>;
   path?: string;
   isPublic?: boolean;
 }

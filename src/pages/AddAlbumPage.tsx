@@ -1,6 +1,7 @@
 import {useState} from "react";
 import axios from "axios";
 import { date, object, string, z } from "zod";
+import api from "@/api/api.ts";
 
 const albumSchema = object({
   albumName: string().min(1, "Album Name cannot be empty"),
@@ -32,7 +33,7 @@ export default function AddAlbum() {
       // Validate
       albumSchema.parse({ albumName, releaseDate, genre, artist });
 
-      await axios.post("http://localhost:3000/api/premium-album", formData, {
+      await api.post("/premium-album", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -46,7 +47,10 @@ export default function AddAlbum() {
 
     return (
       <div className="w-full max-w-xs ml-[450px] mt-[50px]">
-        <form id="addForm" className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form id="addForm" onSubmit={(e) => {
+          e.preventDefault();
+          handleAddAlbum();
+        }} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div className="mb-2 text-2xl font-bold">
             Add Album
         </div>

@@ -58,11 +58,11 @@ const LoginPage = () => {
       password: "",
     },
   });
+  const { onLogin } = useAuth();
 
   // Define submit handler
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
     console.log("values", values);
-    const { onLogin } = useAuth();
     try {
       const res = await api.post(
         "login",
