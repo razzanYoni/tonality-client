@@ -8,15 +8,15 @@ export const AuthContext = React.createContext(null);
 
 export const useAuth = () => React.useContext(AuthContext);
 
-const RoutesComponent = () => {
-  return RenderRoutes(routes);
-};
+export const Routes: React.ReactNode = RenderRoutes(routes);
 
 const TonalityApp = () => {
   return (
     <AuthProvider>
-      <RoutesComponent />
+      {/*@ts-ignore*/}
+      <Routes />
     </AuthProvider>
   );
 };
+
 export default TonalityApp;
