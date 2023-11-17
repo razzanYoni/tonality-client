@@ -3,6 +3,7 @@ import AlbumCard from '@/components/album-card';
 import "../styles/Albums.css";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Button } from '@/components/ui/button';
 
 interface PremiumAlbum {
   albumId: number;
@@ -16,28 +17,43 @@ interface PremiumAlbum {
 const AlbumPage: React.FC = () => {
   const [dataAlbums, setDataAlbums] = useState<PremiumAlbum[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
 
+  const fetchData = async (page: number) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/api/premium-album?page=${page}`);
+      console.log(response);
+
+      setDataAlbums(response.data.data);
+      setTotalPages(response.data.paging.totalPages);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setLoading(true);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/api/premium-album");
-        console.log(response);
-
-        setDataAlbums(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setLoading(true)
-      }
-    };
-
-    fetchData();
-  }, []);
+    fetchData(currentPage);
+  }, [currentPage]);
 
   const toAddAlbum = () => {
     navigate('/add-album', );
   }
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prevPage) => prevPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  };
 
     return (
       <div className="album-page pt-12">
@@ -50,6 +66,14 @@ const AlbumPage: React.FC = () => {
           <AlbumCard key={album.albumId} {...album} />
           ))
         }
+        <div className="space-x-2">
+          <Button variant="outline" size="sm" onClick={handlePreviousPage}>
+            Previous
+          </Button>
+          <Button variant="outline" size="sm" onClick={handleNextPage}>
+            Next
+          </Button>
+      </div>
       </div>
     );
   };
