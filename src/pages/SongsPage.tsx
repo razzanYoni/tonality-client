@@ -61,7 +61,7 @@ const SongsPage = () => {
   const navigate = useNavigate();
 
   const toAddSong = () => {
-    navigate('/1/add-song');
+    navigate(`/${albumId}/add-song`);
   }
   return (
     <div className='mt-2 w-800 flex flex-col items-center '>

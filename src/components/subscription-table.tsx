@@ -35,7 +35,7 @@ export function SubscriptionTable({data}: { data: Subscription[] }) {
             <TableCell>{subscription.status == "PENDING"
               ? <SubscriptionDropdown handler={(accept) => {
                 api.post(
-                  "subscription",
+                  "/subscription",
                   {
                       userId: subscription.userId,
                       premiumAlbumId: subscription.premiumAlbumId,

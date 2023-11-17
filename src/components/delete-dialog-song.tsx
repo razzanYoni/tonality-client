@@ -1,12 +1,16 @@
-import axios from 'axios';
 import { useNavigate, useParams } from 'react-router';
+import api from "@/api/api.ts";
 
 const DeleteSongDialog = () => {
   const { albumId, songId } = useParams();
   const navigate = useNavigate();
-  const handleDeleteSong = () => {
+  const handleDeleteSong = async () => {
     try {
-      axios.delete(`http://localhost:3000/api/premium-album/${albumId}/${songId}`);
+      const response = await api.delete(
+        `/premium-album/${albumId}/${songId}`
+      );
+      console.log(response);
+      navigate(`/${albumId}/songs`);
     } catch (error) {
       console.error('Error deleting song:', error);
     }

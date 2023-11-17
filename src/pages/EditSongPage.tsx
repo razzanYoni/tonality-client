@@ -1,5 +1,5 @@
 import {ChangeEventHandler, useState} from "react";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import { number, object, string } from "zod";
 import api from "@/api/api.ts";
 
@@ -12,7 +12,10 @@ const songSchema = object({
   audioFile: string().nullable(),
 });
 
+
+// TODO: default values
 const EditSong = () => {
+  const navigate = useNavigate();
   const { albumId, songId } = useParams();
   const [songsData, setSongsData] = useState({
     title: '',
@@ -31,6 +34,7 @@ const EditSong = () => {
         songsData
       );
 
+      navigate(`/${albumId}/songs`);
       console.log('Album edited successfully!');
     } catch (error) {
       console.error('Error editing album:', error);

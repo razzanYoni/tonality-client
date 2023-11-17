@@ -40,7 +40,7 @@ export function TableSongs({data}: { data: PremiumSong[] } ) {
                         <TableCell>{song.title}</TableCell>
                         <TableCell>{formatDuration(song.duration)}</TableCell>
                         <TableCell className="">
-                            <SongDropdown/>
+                            <SongDropdown songId={song.songId}/>
                         </TableCell>
                     </TableRow>
             ))}

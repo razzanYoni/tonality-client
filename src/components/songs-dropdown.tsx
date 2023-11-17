@@ -6,10 +6,11 @@ import {
   DropdownMenuItem,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
-import { useNavigate } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 
-export function SongDropdown() {
+export function SongDropdown({songId} : {songId : number}) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { albumId } = useParams();
 
   console.log(dropdownOpen);
 
@@ -20,14 +21,13 @@ export function SongDropdown() {
   const navigate = useNavigate();
 
   const toEditSong = () => {
-    navigate('/1/edit-song/1');
+    navigate(`/${albumId}/edit-song/${songId}`);
   }
 
   const handleDeleteSong = () => {
-    // Tambahkan logika untuk hapus Song
     console.log('Delete Song');
     setDropdownOpen(false);
-    navigate('/1/delete-song/1');
+    navigate(`/${albumId}/delete-song/${songId}`);
   };
 
   return (

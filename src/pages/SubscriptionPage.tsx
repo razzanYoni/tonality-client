@@ -16,22 +16,26 @@ interface Subscription {
 const SubscriptionPage = () => {
   const [subscriptionData, setSubscriptionData] = useState<Subscription[]>([]);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    // get current page from query params
-    const params = new URLSearchParams(window.location.search);
-    const page = params.get('page') || 1;
-    const fetchData = async () => {
+
+  const params = new URLSearchParams(window.location.search);
+  const page = params.get('page') || 1;
+  const update = async () => {
     try {
-      const response = await api.get('subscription' + '?page=' + page,);
-      setSubscriptionData(response.data.subscription ?? [])
+      const response = await api.get('subscription' + '?page=' + page,)
       setLoading(false);
+      setSubscriptionData(response.data.subscription);
     } catch (error) {
       console.error('Error fetching data:', error);
       setLoading(true)
+      setSubscriptionData([])
     }
   }
-  fetchData()
-  }, []);
+
+  useEffect(() => {
+    update();
+    const interval = setInterval(update, 1000 * 5); // 100 milliseconds
+    return () => clearInterval(interval);
+  }, [subscriptionData]);
 
 
   return (

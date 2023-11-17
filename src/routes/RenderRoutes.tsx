@@ -12,7 +12,6 @@ export const RenderRoutes = (mainRoutes: RouteWithLayout[]) => {
       return (
         <Route key={index} element={<Layout />}>
           {subRoutes.map(
-            // @ts-expect-error error bg
             ({ component: Component, path, name, isPublic }, index) => {
               const isPublics: boolean =
                 typeof isPublic === "boolean" ? isPublic : false;

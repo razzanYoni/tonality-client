@@ -11,13 +11,13 @@ const AuthProvider = () => {
   const handleLogin = (accessToken: string) => {
     sessionStorage.setItem("accessToken", accessToken);
     setAccessToken(accessToken);
-    navigate("/album", { replace: true });
+    navigate("/album");
   };
 
   const handleLogout = () => {
     sessionStorage.removeItem("accessToken");
     setAccessToken(null);
-    navigate("/login", { replace: true });
+    navigate("/login", );
   };
 
   const value = {

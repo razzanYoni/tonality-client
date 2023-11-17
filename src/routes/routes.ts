@@ -118,7 +118,7 @@ export const routes: RouteWithLayout[] = [
         title: "Subscription",
         component: SubscriptionPage,
         path: "/subscription",
-      }
+      },
     ],
   },
   {

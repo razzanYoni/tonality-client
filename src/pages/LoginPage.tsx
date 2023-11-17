@@ -120,7 +120,7 @@ const LoginPage = () => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="" {...field} />
+                  <Input type={"password"} placeholder="" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

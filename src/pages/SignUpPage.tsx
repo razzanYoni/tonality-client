@@ -17,6 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { StatusCodes } from "http-status-codes";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast.ts";
+import api from "@/api/api.ts";
 
 const restApiUrl: string = import.meta.env.VITE_REST_API_URL;
 
@@ -67,7 +68,7 @@ const SignUpPage = () => {
 
   // Define submit handler
   async function onSubmit(values: z.infer<typeof signUpFormSchema>) {
-    const res = await axios.post(restApiUrl + "signup", {
+    const res = await api.post("/signup", {
       username: values.username,
       password: values.password,
     });

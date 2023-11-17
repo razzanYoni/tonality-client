@@ -6,10 +6,11 @@ import {
   DropdownMenuItem,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
-import { useNavigate } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 
 export function AlbumDropdown() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { albumId } = useParams();
 
   console.log(dropdownOpen);
 
@@ -22,13 +23,13 @@ export function AlbumDropdown() {
   const handleEditAlbum = () => {
     console.log('Edit Album');
     setDropdownOpen(false);
-    navigate('/1/edit-album');
+    navigate(`/${albumId}/edit-album`);
   }
 
   const handleDeleteAlbum = () => {
     console.log('Delete Album');
     setDropdownOpen(false);
-    navigate('/1/delete-album');
+    navigate(`/${albumId}/delete-album`);
   };
 
   return (
