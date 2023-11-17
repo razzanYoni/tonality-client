@@ -1,6 +1,16 @@
 import axios from "axios";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { number, object, string, z } from "zod";
+
+const songSchema = object({
+  title: string().min(1, "Title cannot be empty"),
+  artist: string().min(1, "Artist cannot be empty"),
+  songNumber: number().int("Song Number must be an integer").min(1, "Song Number must be greater than or equal to 1"),
+  discNumber: number().int("Disc Number must be an integer").min(1, "Disc Number must be greater than or equal to 1"),
+  duration: number().int("Duration must be an integer").min(1, "Duration must be greater than or equal to 1"),
+  audioFile: string().nullable(),
+});
 
 const EditSong = () => {
   const { albumId, songId } = useParams();
@@ -15,6 +25,7 @@ const EditSong = () => {
 
   const handleEditSong = async () => {
     try {
+      songSchema.parse(songsData);
       await axios.patch(
         `/api/premium-album/${albumId}/${songId}`,
         songsData

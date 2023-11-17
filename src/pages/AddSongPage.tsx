@@ -1,6 +1,15 @@
 import axios from "axios";
 import { useState } from "react";
 import { useParams } from "react-router";
+import { number, object, string, z } from "zod";
+
+const songSchema = object({
+  title: string().min(1, "Title cannot be empty"),
+  artist: string().min(1, "Artist cannot be empty"),
+  songNumber: number().int("Song Number must be an integer").min(1, "Song Number must be greater than or equal to 1"),
+  discNumber: number().int("Disc Number must be an integer").min(1, "Disc Number must be greater than or equal to 1"),
+  duration: number().int("Duration must be an integer").min(1, "Duration must be greater than or equal to 1"),
+});
 
 const AddSong = () => {
   const { albumId }= useParams();
@@ -24,6 +33,8 @@ const AddSong = () => {
       if (audioFile !== null) {
         formData.append("audioFile", audioFile);
       }
+
+      songSchema.parse({ title, artist, songNumber, discNumber, duration });
 
       await axios.post(`http://localhost:3000/api/premium-album/${albumId}`, formData, {
         headers: {

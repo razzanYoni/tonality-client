@@ -1,6 +1,15 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { date, object, string, z } from 'zod';
+
+const albumSchema = object({
+  albumName: string().min(1, "Album Name cannot be empty"),
+  releaseDate: date(),
+  genre: string().min(1, "Genre cannot be empty"),
+  artist: string().min(1, "Artist cannot be empty"),
+  coverFile: string().nullable(),
+});
 
 export default function EditAlbum() {
   const { albumId } = useParams();
@@ -29,6 +38,7 @@ export default function EditAlbum() {
 
   const handleEditAlbum = async () => {
     try {
+      albumSchema.parse(albumData);
       await axios.patch(
         `http://localhost:3000/api/premium-album/${albumId}`,
         albumData
