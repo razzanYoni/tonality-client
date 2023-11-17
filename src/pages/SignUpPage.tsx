@@ -15,43 +15,10 @@ import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Link, useNavigate } from "react-router-dom";
 import { StatusCodes } from "http-status-codes";
-import axios from "axios";
 import { useToast } from "@/components/ui/use-toast.ts";
 import api from "@/api/api.ts";
+import {signUpFormSchema} from "@/validations/signup-validation.ts";
 
-const restApiUrl: string = import.meta.env.VITE_REST_API_URL;
-
-const isUsernameAvailable = async (username: string): Promise<boolean> => {
-  const res = await axios.post(restApiUrl + "username-availability", {
-    username: username,
-  });
-
-  const responseBody: { usernameAvailable: string } = res.data;
-
-  return responseBody.usernameAvailable === "true";
-};
-
-const signUpFormSchema = z.object({
-  username: z
-    .string()
-    .min(2, {
-      message: "Username must have a minimum length of 2.",
-    })
-    .max(50, {
-      message: "Username must have a maximum length of 50.",
-    })
-    .refine(isUsernameAvailable, {
-      message: "Username already exists.",
-    }),
-  password: z
-    .string()
-    .min(8, {
-      message: "Password must have a minimum length of 8.",
-    })
-    .max(255, {
-      message: "Password must have a maximum length of 255.",
-    }),
-});
 
 const SignUpPage = () => {
   const { toast } = useToast();
@@ -109,7 +76,7 @@ const SignUpPage = () => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="" {...field} />
+                  <Input type="password" placeholder="" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
