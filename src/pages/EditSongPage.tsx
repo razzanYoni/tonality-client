@@ -1,37 +1,73 @@
-import {ChangeEventHandler, useState} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import { number, object, string } from "zod";
 import api from "@/api/api.ts";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {useForm} from "react-hook-form";
+import {songFormSchema} from "@/validations/premium-song-form-validation.ts";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
+import {Input} from "@/components/ui/input.tsx";
 
-const songSchema = object({
-  title: string().min(1, "Title cannot be empty"),
-  artist: string().min(1, "Artist cannot be empty"),
-  songNumber: number().int("Song Number must be an integer").min(1, "Song Number must be greater than or equal to 1"),
-  discNumber: number().int("Disc Number must be an integer").min(1, "Disc Number must be greater than or equal to 1"),
-  duration: number().int("Duration must be an integer").min(1, "Duration must be greater than or equal to 1"),
-  audioFile: string().nullable(),
-});
-
-
-// TODO: default values
 const EditSong = () => {
   const navigate = useNavigate();
   const { albumId, songId } = useParams();
-  const [songsData, setSongsData] = useState({
-    title: '',
-    artist: '',
-    songNumber: '',
-    discNumber: '',
-    duration: '',
-    audioFile: null
-  });
+  const [audioFile, setAudioFile] = useState<File | null>(null);
 
-  const handleEditSong = async () => {
+  const form = useForm({
+    resolver: zodResolver(songFormSchema),
+    defaultValues: {
+      title: "",
+      artist: "",
+      songNumber: "",
+      discNumber: "",
+      duration: "",
+    }
+  })
+
+  useEffect(() => {
+    const fetchSongData = async () => {
+      try {
+        const response = await api.get(
+          `/premium-album/${albumId}/song/${songId}`
+        );
+
+        form.setValue("title", response.data.title);
+        form.setValue("artist", response.data.artist);
+        form.setValue("songNumber", response.data.songNumber);
+        form.setValue("discNumber", response.data.discNumber);
+        form.setValue("duration", response.data.duration);
+
+        console.log('Song data fetched successfully!');
+      } catch (error) {
+        console.error('Error fetching song data:', error);
+      }
+    }
+
+    fetchSongData();
+  }, [songId]);
+
+  const handleEditSong = form.handleSubmit(async (data) => {
     try {
-      songSchema.parse(songsData);
+      const formData = new FormData();
+      if (audioFile == null) {
+        alert("Please select an audio file.");
+        return;
+      }
+
+      formData.append("title", data.title);
+      formData.append("artist", data.artist);
+      formData.append("songNumber", data.songNumber);
+      formData.append("discNumber", data.discNumber);
+      formData.append("duration", data.duration);
+      formData.append("audioFile", audioFile);
+
       await api.patch(
-        `/premium-album/${albumId}/${songId}`,
-        songsData
+        `/premium-album/${albumId}/song/${songId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
 
       navigate(`/${albumId}/songs`);
@@ -39,102 +75,106 @@ const EditSong = () => {
     } catch (error) {
       console.error('Error editing album:', error);
     }
-  };
-
-  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setSongsData({ ...songsData, [e.target.id]: e.target.value });
-  };
+  });
 
     return (
       <div className="w-full max-w-xs ml-[450px] mt-[50px]">
-        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <div className="mb-2 text-2xl font-bold">
-            Edit Song
-        </div>
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
-              Title
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="title"
-              type="text"
-              placeholder="Title"
-              onChange={handleChange}
+        <Form {...form}>
+          <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleEditSong}>
+            <div className="mb-2 text-2xl font-bold">
+                Edit Song
+            </div>
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className={"text-black"}>Title</FormLabel>
+                  <FormControl>
+                    <Input className={"bg-white text-black placeholder:text-black"} placeholder="Title" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="artist">
-              Artist
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="artist"
-              type="text"
-              placeholder="Artist"
-              onChange={handleChange}
-            />
-          </div>
+            <FormField
+              control={form.control}
+              name="artist"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className={"text-black"}>Artist</FormLabel>
+                  <FormControl>
+                    <Input className={"bg-white text-black placeholder:text-black"} placeholder="Artist" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="songNumber">
-              Song Number
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="songNumber"
-              type="text"
-              placeholder="Song Number"
-              onChange={handleChange}
-            />
-          </div>
+            <FormField
+              control={form.control}
+              name="songNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className={"text-black"}>Song Number</FormLabel>
+                  <FormControl>
+                    <Input type="number" min="1" className={"bg-white text-black placeholder:text-black"} placeholder="Song Number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="discNumber">
-              Disc Number
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="discNumber"
-              type="text"
-              placeholder="Disc Number"
-              onChange={handleChange}
-            />
-          </div>
+            <FormField
+              control={form.control}
+              name="discNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className={"text-black"}>Disc Number</FormLabel>
+                  <FormControl>
+                    <Input type="number" min="1" className={"bg-white text-black placeholder:text-black"} placeholder="Disc Number" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="duration">
-              Duration
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="duration"
-              type="text"
-              placeholder="Duration"
-              onChange={handleChange}
-            />
-          </div>
+            <FormField
+              control={form.control}
+              name="duration"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className={"text-black"}>Duration</FormLabel>
+                  <FormControl>
+                    <Input type="number" min="1" className={"bg-white text-black placeholder:text-black"} placeholder="Duration" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
 
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="audioFile">
-              Audio File
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="audioFile"
-              type="file"
-              accept="audio/*"
-              onChange={handleChange}
-            />
-          </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="audioFile">
+                Audio File
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="audioFile"
+                type="file"
+                accept="audio/*"
+                onChange={(e) => {
+                  const files = e.target.files;
+                  if (files && files.length > 0) {
+                    setAudioFile(files[0]);
+                  }
+                }}
+              />
+            </div>
 
-          <div className="flex items-center justify-center">
-            <button onClick={handleEditSong} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-              Edit
-            </button>
-          </div>
-        </form>
+            <div className="flex items-center justify-center">
+              <button onClick={handleEditSong} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                Edit
+              </button>
+            </div>
+          </form>
+        </Form>
       </div>
     );
   }

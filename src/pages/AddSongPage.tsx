@@ -1,39 +1,17 @@
 import { useState } from "react";
 import { useParams } from "react-router";
-import { object, string } from "zod";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import api from "@/api/api.ts";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {Input} from "@/components/ui/input.tsx";
+import {songFormSchema} from "@/validations/premium-song-form-validation.ts";
 
-const songSchema = object({
-  title: string().min(1, "Title cannot be empty"),
-  artist: string().min(1, "Artist cannot be empty"),
-  songNumber: string().refine((str) => {
-    if (!str || isNaN(Number(str))) {
-      return false;
-    }
-    return true;
-  }, "Song Number must be an integer").refine((str) => (+str) >= 1, "Song Number must be greater than or equal to 1"),
-  discNumber: string().refine((str) => {
-    if (!str || isNaN(Number(str))) {
-      return false;
-    }
-    return true;
-  }, "Disc Number must be an integer").refine((str) => (+str) >= 1, "Disc Number must be greater than or equal to 1"),
-  duration: string().refine((str) => {
-    if (!str || isNaN(Number(str))) {
-      return false;
-    }
-    return true;
-  }, "Duration must be an integer").refine((str) => (+str) >= 1, "Duration must be greater than or equal to 1"),
-});
 
 const AddSong = () => {
   const { albumId }= useParams();
   const form = useForm({
-    resolver: zodResolver(songSchema),
+    resolver: zodResolver(songFormSchema),
     defaultValues: {
       title: "",
       artist: "",
@@ -71,6 +49,7 @@ const AddSong = () => {
       console.log("Song added successfully!");
     } catch (error) {
       console.error("Error adding Song:", error);
+      setAudioFile(null)
     }
   });
 

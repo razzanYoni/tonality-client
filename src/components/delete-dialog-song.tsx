@@ -7,7 +7,7 @@ const DeleteSongDialog = () => {
   const handleDeleteSong = async () => {
     try {
       const response = await api.delete(
-        `/premium-album/${albumId}/${songId}`
+        `/premium-album/${albumId}/song/${songId}`
       );
       console.log(response);
       navigate(`/${albumId}/songs`);

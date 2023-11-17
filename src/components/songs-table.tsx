@@ -1,27 +1,19 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
 import { SongDropdown } from "./songs-dropdown";
-
-interface PremiumSong {
-  songId: number;
-  albumId: number;
-  title: string;
-  artist: string;
-  songNumber: number;
-  discNumber:number;
-  duration:number;
-  audioFilename: string;
-  }
+import {useNavigate} from "react-router-dom";
+import {PremiumSong} from "@/types/premium-song.ts";
 
 export function TableSongs({data}: { data: PremiumSong[] } ) {
-    const formatDuration = (seconds: number): string => {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
+  const navigate = useNavigate();
+  const formatDuration = (seconds: number): string => {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
 
-        const formattedMinutes = String(minutes).padStart(2, '0');
-        const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+      const formattedMinutes = String(minutes).padStart(2, '0');
+      const formattedSeconds = String(remainingSeconds).padStart(2, '0');
 
-        return `${formattedMinutes}:${formattedSeconds}`;
-      };
+      return `${formattedMinutes}:${formattedSeconds}`;
+    };
 
     return (
         <Table className="text-white ml-20 w-[790px] border">
@@ -40,7 +32,13 @@ export function TableSongs({data}: { data: PremiumSong[] } ) {
                         <TableCell>{song.title}</TableCell>
                         <TableCell>{formatDuration(song.duration)}</TableCell>
                         <TableCell className="">
-                            <SongDropdown songId={song.songId}/>
+                            <SongDropdown handler={(edit) => {
+                              if (edit) {
+                                navigate(`/${song.albumId}/edit-song/${song.songId}`);
+                              } else {
+                                navigate(`/${song.albumId}/delete-song/${song.songId}`);
+                              }
+                            }}/>
                         </TableCell>
                     </TableRow>
             ))}

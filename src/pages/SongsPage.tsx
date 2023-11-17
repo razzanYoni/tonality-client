@@ -3,41 +3,43 @@ import cover from '../assets/images/default-cover.jpg'
 import { TableSongs } from '@/components/songs-table';
 import { AlbumDropdown } from '@/components/album-dropdown';
 import { useNavigate, useParams } from 'react-router-dom';
-import api from "@/api/api.ts";
-
-interface PremiumSong {
-  songId: number;
-  albumId: number;
-  title: string;
-  artist: string;
-  songNumber: number;
-  discNumber:number;
-  duration:number;
-  audioFilename: string;
-}
+import api, {restUrl} from "@/api/api.ts";
+import {PremiumAlbum} from "@/types/premium-album.ts";
+import {PremiumSong} from "@/types/premium-song.ts";
 
 const SongsPage = () => {
   const { albumId } = useParams<{ albumId: string }>();
+  const [albumData, setAlbumData] = useState<PremiumAlbum | null>(null);
   const [songsData, setSongsData] = useState<PremiumSong[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const fetchData = async () => {
+    try {
+      const responseAlbum = await api.get(
+        `/premium-album/${albumId}`,
+      );
+      setAlbumData(responseAlbum.data.data);
+
+      const responseSongs = await api.get(
+        `/premium-album/${albumId}/song`,
+      );
+      setSongsData(() => ([
+
+        ...responseSongs.data,
+      ]));
+      console.log("response songs", responseSongs.data.data);
+
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setLoading(true)
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get(
-          `/premium-album/${albumId}`);
-        console.log(response);
-
-        setSongsData(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        setLoading(true)
-      }
-    };
-
-    fetchData();
-  }, []);
+      const interval = setInterval(fetchData, 1000); // 100 milliseconds
+      return () => clearInterval(interval);
+  }, [songsData]);
 
   const calculateTotalDuration = (songsArray: Array<{ duration: number }>): string => {
     const totalSeconds = songsArray.reduce((total, song) => total + song.duration, 0);
@@ -60,22 +62,32 @@ const SongsPage = () => {
 
   const navigate = useNavigate();
 
+  const releaseDate = new Date(albumData?.releaseDate ?? 0);
+  releaseDate.setHours(0, 0, 0, 0);
+  const formattedReleaseDate = releaseDate.toISOString().split('T')[0];
+
   const toAddSong = () => {
     navigate(`/${albumId}/add-song`);
   }
   return (
     <div className='mt-2 w-800 flex flex-col items-center '>
         <div className='flex items-end w-[760px]'>
-            <img src={cover} alt="" className="w-[270px]"/>
+            <img src={albumData?.coverFilename ? restUrl + `/${albumData.coverFilename}` : cover} alt="" className="w-[270px]"/>
             <div className='text-white text-left ml-5'>
-                <div className='text-5xl'>Title</div>
-                <div>Singer</div>
-                <div>Year</div>
+                <div className='text-5xl'>{albumData?.albumName}</div>
+                <div>{albumData?.artist}</div>
+                <div>{formattedReleaseDate}</div>
                 <div>{countSong} songs</div>
                 <div>{totalDuration}</div>
             </div>
             <div className='absolute right-64 top-7'>
-                <AlbumDropdown/>
+                <AlbumDropdown handler={(edit) => {
+                    if (edit) {
+                        navigate(`/${albumId}/edit-album`);
+                    } else {
+                        navigate(`/${albumId}/delete-album`);
+                    }
+                }}/>
             </div>
         </div>
         <div className='mt-[10px] mb-[80px] justify-start w-[900px]'>
