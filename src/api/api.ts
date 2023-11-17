@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const restApiUrl: string = import.meta.env.VITE_REST_API_URL;
+export const restUrl: string = import.meta.env.VITE_REST_URL;
 
 const api = axios.create({
-    baseURL: restApiUrl,
+    baseURL: restUrl + "api/",
     headers: {
         "Authorization": "Bearer " + sessionStorage.getItem("accessToken"),
     },
