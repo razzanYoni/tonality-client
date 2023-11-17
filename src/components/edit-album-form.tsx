@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-
-interface FormState {
-  albumName: string;
-  releaseDate: string;
-  genre: string;
-  artist: string;
-  coverFile: File | null;
-}
+import {FormState} from "@/types/premium-album-form.ts";
 
 const initialFormState: FormState = {
   albumName: '',

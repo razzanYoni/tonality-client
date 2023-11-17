@@ -4,16 +4,9 @@ import "../styles/Albums.css";
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import api from "@/api/api.ts";
+import {PremiumAlbum} from "@/types/premium-album.ts";
 
-interface PremiumAlbum {
-  albumId: number;
-  albumName: string;
-  releaseDate: Date;
-  genre: string;
-  artist: string;
-  coverFilename: string;
-}
-
+// TODO : Prettier pagination
 const AlbumPage = () => {
   const [dataAlbums, setDataAlbums] = useState<PremiumAlbum[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +20,7 @@ const AlbumPage = () => {
         `/premium-album?page=${page}`);
       console.log(response);
 
-      setDataAlbums(response.data.data);
+      setDataAlbums(() => [...response.data.data]);
       setTotalPages(response.data.paging.totalPages);
       setLoading(false);
     } catch (error) {
@@ -37,8 +30,9 @@ const AlbumPage = () => {
   };
 
   useEffect(() => {
-    fetchData(currentPage);
-  }, [currentPage]);
+    const interval = setInterval(fetchData, 1000); // 100 milliseconds
+    return () => clearInterval(interval);
+  }, [dataAlbums]);
 
   const toAddAlbum = () => {
     navigate('/add-album', );
