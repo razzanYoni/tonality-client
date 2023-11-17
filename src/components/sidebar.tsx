@@ -7,7 +7,7 @@ import {useAuth} from "@/TonalityApp.tsx";
 
 
 const Sidebar = () => {
-  const { token, onLogout } = useAuth();
+  const { token, username, onLogout } = useAuth();
   return (
     <nav>
         <div className="sidebar text-white w-200 flex fixed flex-col items-center top-0 left-0 h-full border-r border-opacity-10 border-gray-300 pr-6">
@@ -28,7 +28,7 @@ const Sidebar = () => {
             </nav>
           </div>
           <div className="user-profile flex mb-5 items-center text-left justify-items-left ">
-           <FontAwesomeIcon icon={faUser} className="mr-2" /> Username
+           <FontAwesomeIcon icon={faUser} className="mr-2" /> {username}
           </div>
           {
             token &&
