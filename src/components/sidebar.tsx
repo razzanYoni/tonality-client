@@ -2,6 +2,7 @@ import logo from '../assets/images/logo.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle, faUser, } from '@fortawesome/free-solid-svg-icons';
 import {NavLink} from "react-router-dom";
+import {cn} from "@/lib/utils.ts";
 // import {useAuth} from "@/TonalityApp.tsx";
 // import {NavLink, useNavigate} from 'react-router-dom';
 // import profile from '../assets/images/user.png';
@@ -20,10 +21,10 @@ const Sidebar = () => {
           <div className="menu h-screen">
             <nav>
               <ul className='text-left'>
-                <NavLink to="/album" className="mb-2 hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center">
+                <NavLink to="/album" className={cn("mb-2 hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center", location.pathname === "/album" && "bg-gray-700")}>
                   <FontAwesomeIcon icon={faPlayCircle} className="mr-2" /> Premium Albums
                 </NavLink>
-                <NavLink to="/subscription" className="mb-2 hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center">
+                <NavLink to="/subscription" className={cn("mb-2 hover:bg-gray-700 p-2 rounded cursor-pointer flex items-center", location.pathname === "/subscription" && "bg-gray-700")}>
                   <FontAwesomeIcon icon={faUser} className="mr-2" /> Subscription
                 </NavLink>
               </ul>

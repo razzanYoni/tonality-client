@@ -1,5 +1,3 @@
-"use client";
-
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,13 +13,12 @@ import {
 import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Link } from "react-router-dom";
-import { storeAccessToken } from "@/utils/token.ts";
 import { StatusCodes } from "http-status-codes";
-
-const restApiUrl: string = import.meta.env.VITE_REST_API_URL;
+import {useAuth} from "@/TonalityApp.tsx";
+import api from "@/api/api.ts";
 
 const isUsernameInvalid = async (username: string): Promise<boolean> => {
-  const res = await axios.post(restApiUrl + "username-availability", {
+  const res = await api.post("username-availability", {
     username: username,
   });
 
@@ -64,19 +61,25 @@ const LoginPage = () => {
 
   // Define submit handler
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
+    console.log("values", values);
+    const { onLogin } = useAuth();
     try {
-      const res = await axios.post(
-        restApiUrl + "login",
+      const res = await api.post(
+        "login",
         {
           username: values.username,
           password: values.password,
         },
         {
-          withCredentials: true,
+          headers: {
+            "access-control-expose-headers" : "Set-Cookie",
+          }
         },
       );
 
-      storeAccessToken(res.data.accessToken);
+      console.log("res", res.data.accessToken)
+
+      onLogin(res.data.accessToken);
     } catch (err) {
       if (
         axios.isAxiosError(err) &&

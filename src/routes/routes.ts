@@ -12,6 +12,7 @@ import NotMatchLayout from "@/layouts/NotMatchLayout.tsx";
 import NotMatch from "@/pages/NotMatch.tsx";
 import DeleteAlbumDialog from "@/components/delete-dialog-album";
 import DeleteSongDialog from "@/components/delete-dialog-song";
+import SubscriptionPage from "@/pages/SubscriptionPage.tsx";
 
 export const routes = [
   {
@@ -98,6 +99,12 @@ export const routes = [
           },
         ],
       },
+      {
+        name: "subscription",
+        title: "Subscription",
+        component: SubscriptionPage,
+        path: "/subscription",
+      }
     ],
   },
   {

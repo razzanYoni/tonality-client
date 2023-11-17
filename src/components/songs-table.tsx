@@ -4,12 +4,12 @@ import { SongDropdown } from "./songs-dropdown";
 interface PremiumSong {
   songId: number;
   albumId: number;
-  title: String;
-  artist: String;
+  title: string;
+  artist: string;
   songNumber: number;
   discNumber:number;
   duration:number;
-  audioFilename: String;
+  audioFilename: string;
   }
 
 export function TableSongs( data: PremiumSong[] ) {
