@@ -5,8 +5,11 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {albumFormSchema} from "@/validations/premium-album-form-validation.ts";
+import {StatusCodes} from "http-status-codes";
+import {useAuth} from "@/context/auth-context.tsx";
 
 export default function AddAlbum() {
+  const { onLogout } = useAuth();
   const form = useForm({
     resolver: zodResolver(albumFormSchema),
     defaultValues: {
@@ -32,6 +35,12 @@ export default function AddAlbum() {
       formData.append("genre", data.genre);
       formData.append("artist", data.artist);
       formData.append("coverFile", coverFile);
+
+      api.post("/verify-token",).then((response) => {
+        if (response.status !== StatusCodes.OK) {
+          onLogout();
+        }
+      });
 
       await api.post("/premium-album",
         formData,

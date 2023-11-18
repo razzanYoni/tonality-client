@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "@/routes/ProtectedRoute.tsx";
 import { generateFlattenRoutes } from "@/lib/utils.ts";
 import {RouteWithLayout} from "@/routes/routes.ts";
-import AuthProvider from "@/context/AuthProvider.tsx";
+import AuthContext from "@/context/auth-context.tsx";
 
 export const RenderRoutes = (mainRoutes: RouteWithLayout[]) => {
   return () => {
@@ -38,7 +38,7 @@ export const RenderRoutes = (mainRoutes: RouteWithLayout[]) => {
     });
     return (
       <Routes>
-        <Route element={<AuthProvider />}>
+        <Route element={<AuthContext />}>
         {layouts}
         </Route>
       </Routes>

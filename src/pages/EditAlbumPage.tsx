@@ -7,9 +7,12 @@ import {useNavigate} from "react-router";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {albumFormSchema} from "@/validations/premium-album-form-validation.ts";
+import {useAuth} from "@/context/auth-context.tsx";
+import {StatusCodes} from "http-status-codes";
 
 
 export default function EditAlbum() {
+  const { onLogout } = useAuth();
   const navigate = useNavigate();
   const { albumId } = useParams();
   const [coverFile, setCoverFile] = useState<File | null>(null);
@@ -27,6 +30,12 @@ export default function EditAlbum() {
   useEffect(() => {
     const fetchAlbumData = async () => {
       try {
+        api.post("/verify-token",).then((response) => {
+          if (response.status !== StatusCodes.OK) {
+            onLogout();
+          }
+        });
+
         const response = await api.get(
           `/premium-album/${albumId}`
         );
@@ -64,6 +73,12 @@ export default function EditAlbum() {
       formData.append("genre", data.genre);
       formData.append("artist", data.artist);
       formData.append("coverFile", coverFile);
+
+      api.post("/verify-token",).then((response) => {
+        if (response.status !== StatusCodes.OK) {
+          onLogout();
+        }
+      });
 
       await api.patch(
         `/premium-album/${albumId}`,

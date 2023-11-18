@@ -6,8 +6,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import api, {restUrl} from "@/api/api.ts";
 import {PremiumAlbum} from "@/types/premium-album.ts";
 import {PremiumSong} from "@/types/premium-song.ts";
+import {StatusCodes} from "http-status-codes";
+import {useAuth} from "@/context/auth-context.tsx";
 
 const SongsPage = () => {
+  const { onLogout } = useAuth();
   const { albumId } = useParams<{ albumId: string }>();
   const [albumData, setAlbumData] = useState<PremiumAlbum | null>(null);
   const [songsData, setSongsData] = useState<PremiumSong[]>([]);
@@ -15,6 +18,12 @@ const SongsPage = () => {
 
   const fetchData = async () => {
     try {
+      api.post("/verify-token",).then((response) => {
+        if (response.status !== StatusCodes.OK) {
+          onLogout();
+        }
+      });
+
       const responseAlbum = await api.get(
         `/premium-album/${albumId}`,
       );
@@ -27,7 +36,6 @@ const SongsPage = () => {
 
         ...responseSongs.data,
       ]));
-      console.log("response songs", responseSongs.data.data);
 
       setLoading(false);
     } catch (error) {

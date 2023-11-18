@@ -6,8 +6,11 @@ import {useForm} from "react-hook-form";
 import {songFormSchema} from "@/validations/premium-song-form-validation.ts";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {Input} from "@/components/ui/input.tsx";
+import {StatusCodes} from "http-status-codes";
+import {useAuth} from "@/context/auth-context.tsx";
 
 const EditSong = () => {
+  const { onLogout } = useAuth();
   const navigate = useNavigate();
   const { albumId, songId } = useParams();
   const [audioFile, setAudioFile] = useState<File | null>(null);
@@ -26,6 +29,12 @@ const EditSong = () => {
   useEffect(() => {
     const fetchSongData = async () => {
       try {
+        api.post("/verify-token",).then((response) => {
+          if (response.status !== StatusCodes.OK) {
+            onLogout();
+          }
+        });
+
         const response = await api.get(
           `/premium-album/${albumId}/song/${songId}`
         );
@@ -59,6 +68,12 @@ const EditSong = () => {
       formData.append("discNumber", data.discNumber);
       formData.append("duration", data.duration);
       formData.append("audioFile", audioFile);
+
+      api.post("/verify-token",).then((response) => {
+        if (response.status !== StatusCodes.OK) {
+          onLogout();
+        }
+      });
 
       await api.patch(
         `/premium-album/${albumId}/song/${songId}`,

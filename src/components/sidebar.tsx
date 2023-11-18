@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle, faUser, } from '@fortawesome/free-solid-svg-icons';
 import {NavLink} from "react-router-dom";
 import {cn} from "@/lib/utils.ts";
-import {useAuth} from "@/TonalityApp.tsx";
+import {useAuth} from "@/context/auth-context.tsx";
 
 
 const Sidebar = () => {

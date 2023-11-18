@@ -14,12 +14,16 @@ import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Link } from "react-router-dom";
 import { StatusCodes } from "http-status-codes";
-import {useAuth} from "@/TonalityApp.tsx";
-import api from "@/api/api.ts";
+import api  from "@/api/api.ts";
 import {loginFormSchema} from "@/validations/login-validation.ts";
+import {useAuth} from "@/context/auth-context.tsx";
+import { useNavigate } from "react-router-dom";
 
 
 const LoginPage = () => {
+  const { token, onLogin, onLogout, } = useAuth();
+  const navigate = useNavigate();
+
   // Define form
   const loginForm = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -28,11 +32,20 @@ const LoginPage = () => {
       password: "",
     },
   });
-  const { onLogin } = useAuth();
+
+
+  if (token) {
+    api.post("/verify-token",).then((response) => {
+      if (response.status !== StatusCodes.OK) {
+        onLogout();
+      } else {
+        navigate("/album");
+      }
+    });
+  }
 
   // Define submit handler
   async function onSubmit(values: z.infer<typeof loginFormSchema>) {
-    console.log("values", values);
     try {
       const res = await api.post(
         "login",
@@ -48,6 +61,7 @@ const LoginPage = () => {
       );
 
       onLogin(res.data.accessToken, values.username);
+      navigate("/album");
     } catch (err) {
       if (
         axios.isAxiosError(err) &&

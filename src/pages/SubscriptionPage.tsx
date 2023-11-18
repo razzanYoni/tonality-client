@@ -2,8 +2,11 @@ import {useEffect, useState} from 'react';
 import {SubscriptionTable} from "@/components/subscription-table.tsx";
 import api from "@/api/api.ts";
 import {Subscription} from "@/types/subscription.ts";
+import {StatusCodes} from "http-status-codes";
+import {useAuth} from "@/context/auth-context.tsx";
 
 const SubscriptionPage = () => {
+  const { onLogout } = useAuth();
   const [subscriptionData, setSubscriptionData] = useState<Subscription[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -11,6 +14,12 @@ const SubscriptionPage = () => {
   const page = params.get('page') || 1;
   const update = async () => {
     try {
+      api.post("/verify-token",).then((response) => {
+        if (response.status !== StatusCodes.OK) {
+          onLogout();
+        }
+      });
+
       const response = await api.get('subscription' + '?page=' + page,)
       setLoading(false);
       setSubscriptionData(

@@ -1,11 +1,20 @@
 import { useNavigate, useParams } from 'react-router';
 import api from "@/api/api.ts";
+import {StatusCodes} from "http-status-codes";
+import {useAuth} from "@/context/auth-context.tsx";
 
 const DeleteSongDialog = () => {
+  const { onLogout } = useAuth();
   const { albumId, songId } = useParams();
   const navigate = useNavigate();
   const handleDeleteSong = async () => {
     try {
+      api.post("/verify-token",).then((response) => {
+        if (response.status !== StatusCodes.OK) {
+          onLogout();
+        }
+      });
+
       const response = await api.delete(
         `/premium-album/${albumId}/song/${songId}`
       );

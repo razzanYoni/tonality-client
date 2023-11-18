@@ -6,9 +6,12 @@ import api from "@/api/api.ts";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {songFormSchema} from "@/validations/premium-song-form-validation.ts";
+import {StatusCodes} from "http-status-codes";
+import {useAuth} from "@/context/auth-context.tsx";
 
 
 const AddSong = () => {
+  const { onLogout } = useAuth();
   const { albumId }= useParams();
   const form = useForm({
     resolver: zodResolver(songFormSchema),
@@ -36,6 +39,12 @@ const AddSong = () => {
       formData.append("duration", data.duration);
       formData.append("audioFile", audioFile);
       formData.append("albumId", albumId?.toString() ?? "");
+
+      api.post("/verify-token",).then((response) => {
+        if (response.status !== StatusCodes.OK) {
+          onLogout();
+        }
+      });
 
       await api.post(`/premium-album/${albumId}`, formData, {
         headers: {

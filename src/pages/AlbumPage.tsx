@@ -5,9 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import api from "@/api/api.ts";
 import {PremiumAlbum} from "@/types/premium-album.ts";
+import {StatusCodes} from "http-status-codes";
+import {useAuth} from "@/context/auth-context.tsx";
 
 // TODO : Prettier pagination
 const AlbumPage = () => {
+  const { onLogout } = useAuth();
   const [dataAlbums, setDataAlbums] = useState<PremiumAlbum[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,9 +19,14 @@ const AlbumPage = () => {
 
   const fetchData = async (page: number) => {
     try {
+      api.post("/verify-token",).then((response) => {
+        if (response.status !== StatusCodes.OK) {
+          onLogout();
+        }
+      });
+
       const response = await api.get(
         `/premium-album?page=${page}`);
-      console.log(response);
 
       setDataAlbums(() => [...response.data.data]);
       setTotalPages(response.data.paging.totalPages);
@@ -30,7 +38,7 @@ const AlbumPage = () => {
   };
 
   useEffect(() => {
-    const interval = setInterval(fetchData, 1000); // 100 milliseconds
+    const interval = setInterval(function () {fetchData(currentPage)}, 1000); // 100 milliseconds
     return () => clearInterval(interval);
   }, [dataAlbums]);
 
