@@ -13,4 +13,5 @@ This application is a client to manage subscriptions and premium albums for Tona
 | Task                             | Student ID         |
 |----------------------------------|--------------------|
 | Authentication and Authorization | 13521096, 13521087 |
-| Premium Albums and Subscriptions | 13521063           |
+| Premium Albums                   | 13521063           |
+| Subscriptions                    | 13521087           |
